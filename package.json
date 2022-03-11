@@ -16,7 +16,8 @@
     "@internal-staff-portal/backend-shared": "^1.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "ioredis": "^4.28.5"
+    "ioredis": "^4.28.5",
+    "mongoose": "^6.2.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
