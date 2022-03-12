@@ -14,6 +14,12 @@ import express, { Express } from "express";
 import RedisClient, { RedisOptions } from "ioredis";
 import { connect } from "mongoose";
 import { join } from "path";
+import { Server as SocketServer, ServerOptions } from "socket.io";
+
+interface socketIO {
+  port: number;
+  options?: Partial<ServerOptions>;
+}
 
 //the options provided to the core
 export interface CoreOptions {
@@ -24,6 +30,7 @@ export interface CoreOptions {
   redis: RedisOptions;
   mongoURI: string;
   adminKey: string;
+  socketIO: socketIO;
 }
 
 //hacky way to fix ts interpreting RedisClient as a namespace
@@ -38,6 +45,7 @@ export class Core {
   private logger: LogFunction;
   private redisClient: Redis;
   private adminKey: string;
+  private io: SocketServer;
 
   constructor(options: CoreOptions) {
     //init array of all module names
@@ -57,6 +65,9 @@ export class Core {
 
     //init the redis client
     this.redisClient = this.initRedis(options.redis);
+
+    //init the socketIO server
+    this.io = this.initSocketIO(options.socketIO);
 
     //connect to mongoose
     this.initMongo(options.mongoURI);
@@ -126,6 +137,7 @@ export class Core {
         validateMiddleware: this.auth.validateMiddleware,
       },
       logger: this.logger,
+      createNamespace: (path) => this.io.of(path),
     });
 
     //throw error if path or name of module is alredy used
@@ -161,7 +173,10 @@ export class Core {
 
     //start express app
     app.listen(port, () =>
-      this.logger("info", `Internal-Staff-Portal instance on Port ${port}!`),
+      this.logger(
+        "info",
+        `Internal-Staff-Portal REST backend on Port ${port}!`,
+      ),
     );
 
     //create info route
@@ -182,6 +197,24 @@ export class Core {
 
     //return app
     return app;
+  }
+
+  //init socketIO
+  private initSocketIO({ port, options }: socketIO) {
+    //create socket.io server
+    const io = new SocketServer(options);
+
+    //listen on port
+    io.listen(port);
+
+    //log startup
+    this.logger(
+      "info",
+      `Internal-Staff-Portal Socket.IO backend on Port ${port}!`,
+    );
+
+    //return the server
+    return io;
   }
 
   //init redis client
