@@ -135,6 +135,7 @@ export class Core {
       auth: {
         sendData: sendData,
         validateMiddleware: this.auth.validateMiddleware,
+        validate: this.auth.validate,
       },
       logger: this.logger,
       createNamespace: (path) => this.io.of(path),
