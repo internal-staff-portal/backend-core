@@ -49,13 +49,13 @@ export class Core {
 
   constructor(options: CoreOptions) {
     //init array of all module names
-    this.modules = ["Core", "Auth"];
+    this.modules = [];
 
     //set the admin key
     this.adminKey = options.adminKey;
 
     //init array of all module paths
-    this.paths = ["/auth"];
+    this.paths = [];
 
     //set the logger
     this.logger = options.logger;
@@ -76,7 +76,7 @@ export class Core {
     this.auth = this.initAuth(options);
 
     //use auth module router
-    this.app.use("/api/auth", this.auth.Router);
+    this.app.use("/auth", this.auth.Router);
 
     //register all modules
     (options.modules || []).forEach((module) => this.addModule(module));
