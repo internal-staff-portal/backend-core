@@ -17,7 +17,7 @@ import { join } from "path";
 
 //the options provided to the core
 export interface CoreOptions {
-  modules: ModuleConstructor[];
+  modules?: ModuleConstructor[];
   port: number;
   logger: LogFunction;
   auth: IConfig & { tokenSetName: string };
@@ -41,7 +41,7 @@ export class Core {
 
   constructor(options: CoreOptions) {
     //init array of all module names
-    this.modules = ["Auth"];
+    this.modules = ["Core", "Auth"];
 
     //set the admin key
     this.adminKey = options.adminKey;
@@ -53,22 +53,22 @@ export class Core {
     this.logger = options.logger;
 
     //init express app
-    this.app = this.initExpress(options.port, this.logger);
+    this.app = this.initExpress(options.port);
 
     //init the redis client
-    this.redisClient = initRedis(options.redis, this.logger);
+    this.redisClient = this.initRedis(options.redis);
 
     //connect to mongoose
-    initMongo(options.mongoURI, this.logger);
+    this.initMongo(options.mongoURI);
 
     //init the auth module
-    this.auth = initAuth(options, this.redisClient, this.logger);
+    this.auth = this.initAuth(options);
 
     //use auth module router
     this.app.use("/api/auth", this.auth.Router);
 
     //register all modules
-    options.modules.forEach((module) => this.addModule(module));
+    (options.modules || []).forEach((module) => this.addModule(module));
   }
 
   //get all endpoints
@@ -149,7 +149,7 @@ export class Core {
   }
 
   //init express app
-  private initExpress(port: number, logger: LogFunction) {
+  private initExpress(port: number) {
     //create app
     const app = express();
 
@@ -161,7 +161,7 @@ export class Core {
 
     //start express app
     app.listen(port, () =>
-      logger("info", `Internal-Staff-Portal instance on Port ${port}!`),
+      this.logger("info", `Internal-Staff-Portal instance on Port ${port}!`),
     );
 
     //create info route
@@ -183,169 +183,183 @@ export class Core {
     //return app
     return app;
   }
-}
 
-//init redis client
-function initRedis(options: RedisOptions, logger: LogFunction) {
-  //create client
-  const redis = new RedisClient(options);
+  //init redis client
+  private initRedis(options: RedisOptions) {
+    //create client
+    const redis = new RedisClient(options);
 
-  //listen on connection event
-  redis.connect(() => {
-    logger("info", "Connected to Redis Database!");
-  });
+    //listen on connection event
+    redis.connect(() => {
+      this.logger("info", "Connected to Redis Database!");
+    });
 
-  //return redis instance
-  return redis;
-}
+    //return redis instance
+    return redis;
+  }
 
-//init mongodb
-function initMongo(uri: string, logger: LogFunction) {
-  //connect to mongodb
-  connect(uri, () => logger("info", "Connected to Mongo Database!"));
-}
+  //init mongodb
+  private initMongo(uri: string) {
+    //connect to mongodb
+    connect(uri, () => this.logger("info", "Connected to Mongo Database!"));
+  }
 
-//init auth instance
-function initAuth(
-  { auth: authOptions }: CoreOptions,
-  redis: Redis,
-  logger: LogFunction,
-) {
-  //create instance
-  const auth = new AuthInstance(authOptions);
+  //init auth instance
+  private initAuth({ auth: authOptions }: CoreOptions) {
+    //create instance
+    const auth = new AuthInstance(authOptions);
 
-  //set logger
-  auth.logger(logger);
+    //set logger
+    auth.logger(this.logger);
 
-  //get a user by mail from mongoDB
-  auth.use("getUserByMail", async ({ email }) => {
-    try {
-      //get user from db
-      const user = await UserModel.findOne({ email });
+    //get a user by mail from mongoDB
+    auth.use("getUserByMail", async ({ email }) => {
+      try {
+        //get user from db
+        const user = await UserModel.findOne({ email });
 
-      //transform user data
-      const userData: IUserData | null = user
-        ? {
-            email: user.email,
-            hashedPassword: user.hashedPassword,
-            id: user._id,
-            username: user.username,
-          }
-        : null;
+        //transform user data
+        const userData: IUserData | null = user
+          ? {
+              email: user.email,
+              hashedPassword: user.hashedPassword,
+              id: user._id,
+              username: user.username,
+            }
+          : null;
 
-      //return no error
-      return [false, userData];
-    } catch (err) {
-      //log error
-      logger("error", String(err));
+        //return no error
+        return [false, userData];
+      } catch (err) {
+        //log error
+        this.logger("error", String(err));
 
-      //return error
-      return [true, null];
-    }
-  });
+        //return error
+        return [true, null];
+      }
+    });
 
-  //get a user by name from mongoDB
-  auth.use("getUserByName", async ({ username }) => {
-    try {
-      //get user from db
-      const user = await UserModel.findOne({ username });
+    //get a user by name from mongoDB
+    auth.use("getUserByName", async ({ username }) => {
+      try {
+        //get user from db
+        const user = await UserModel.findOne({ username });
 
-      //transform user data
-      const userData: IUserData | null = user
-        ? {
-            email: user.email,
-            hashedPassword: user.hashedPassword,
-            id: user._id,
-            username: user.username,
-          }
-        : null;
+        //transform user data
+        const userData: IUserData | null = user
+          ? {
+              email: user.email,
+              hashedPassword: user.hashedPassword,
+              id: user._id,
+              username: user.username,
+            }
+          : null;
 
-      //return no error
-      return [false, userData];
-    } catch (err) {
-      //log error
-      logger("error", String(err));
+        //return no error
+        return [false, userData];
+      } catch (err) {
+        //log error
+        this.logger("error", String(err));
 
-      //return error
-      return [true, null];
-    }
-  });
+        //return error
+        return [true, null];
+      }
+    });
 
-  //store a user in the mongoDB
-  auth.use("storeUser", async ({ email, hashedPassword, username }) => {
-    try {
-      //create user
-      await UserModel.create({
-        email: email,
-        hashedPassword: hashedPassword,
-        username: username,
-      });
+    //store a user in the mongoDB
+    auth.use("storeUser", async ({ email, hashedPassword, username }) => {
+      try {
+        //create user
+        await UserModel.create({
+          email: email,
+          hashedPassword: hashedPassword,
+          username: username,
+        });
 
-      //return no error
+        //return no error
+        return [false];
+      } catch (err) {
+        //log error
+        this.logger("error", String(err));
+
+        //return error
+        return [true];
+      }
+    });
+
+    //check if a token is in the redis db
+    auth.use("checkToken", async ({ token }) => {
+      try {
+        //check if the token exists
+        const included = await this.redisClient.sismember(
+          authOptions.tokenSetName,
+          token,
+        );
+
+        //return no error
+        return [false, Boolean(included)];
+      } catch (err) {
+        //log error
+        this.logger("error", String(err));
+
+        //return error
+        return [true, null];
+      }
+    });
+
+    //store a token from the redis db
+    auth.use("deleteToken", async ({ token }) => {
+      try {
+        //remove the token
+        await this.redisClient.srem(authOptions.tokenSetName, token);
+
+        //return no error
+        return [false];
+      } catch (err) {
+        //log error
+        this.logger("error", String(err));
+
+        //return error
+        return [true];
+      }
+    });
+
+    //store a token in the redis db
+    auth.use("storeToken", async ({ token }) => {
+      try {
+        //store the token
+        await this.redisClient.sadd(authOptions.tokenSetName, token);
+
+        //return no error
+        return [false];
+      } catch (err) {
+        //log error
+        this.logger("error", String(err));
+
+        //return error
+        return [true];
+      }
+    });
+
+    //disable (intercept) all registers
+    auth.intercept("register", () => [true]);
+
+    //all login conditions
+    auth.intercept("login", async ({ id }) => {
+      //get full user from db
+      const user = await UserModel.findById(id);
+
+      //check if user is null
+      if (!user) return [true];
+
+      //check if user is inactive
+      if (!user?.active) return [true];
+
+      //return no intercept
       return [false];
-    } catch (err) {
-      //log error
-      logger("error", String(err));
+    });
 
-      //return error
-      return [true];
-    }
-  });
-
-  //check if a token is in the redis db
-  auth.use("checkToken", async ({ token }) => {
-    try {
-      //check if the token exists
-      const included = await redis.sismember(authOptions.tokenSetName, token);
-
-      //return no error
-      return [false, Boolean(included)];
-    } catch (err) {
-      //log error
-      logger("error", String(err));
-
-      //return error
-      return [true, null];
-    }
-  });
-
-  //store a token from the redis db
-  auth.use("deleteToken", async ({ token }) => {
-    try {
-      //remove the token
-      await redis.srem(authOptions.tokenSetName, token);
-
-      //return no error
-      return [false];
-    } catch (err) {
-      //log error
-      logger("error", String(err));
-
-      //return error
-      return [true];
-    }
-  });
-
-  //store a token in the redis db
-  auth.use("storeToken", async ({ token }) => {
-    try {
-      //store the token
-      await redis.sadd(authOptions.tokenSetName, token);
-
-      //return no error
-      return [false];
-    } catch (err) {
-      //log error
-      logger("error", String(err));
-
-      //return error
-      return [true];
-    }
-  });
-
-  //disable (intercept) all registers
-  auth.intercept("register", () => [true]);
-
-  //return auth instance
-  return auth;
+    //return auth instance
+    return auth;
+  }
 }
