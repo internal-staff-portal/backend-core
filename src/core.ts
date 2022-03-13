@@ -9,6 +9,7 @@ import {
   LogFunction,
 } from "@internal-staff-portal/backend-shared";
 import UsersModule, { UserModel } from "@internal-staff-portal/backend-users";
+import RolesModule from "@internal-staff-portal/backend-users";
 import { hashSync } from "bcrypt";
 import cors from "cors";
 import express, { Express } from "express";
@@ -56,7 +57,7 @@ export class Core {
   constructor(options: CoreOptions) {
     //add default modules
     options.modules = options.modules || [];
-    options.modules = [UsersModule(), ...options.modules];
+    options.modules = [UsersModule(), RolesModule(), ...options.modules];
 
     //init array of all module names
     this.modules = [];

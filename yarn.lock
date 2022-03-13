@@ -12,6 +12,16 @@
     jsonwebtoken "^8.5.1"
     uuid "^8.3.2"
 
+"@internal-staff-portal/backend-roles@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@internal-staff-portal/backend-roles/-/backend-roles-3.0.0.tgz#074023356169d4d4667006c84814d88e258965ef"
+  integrity sha512-7ZhFisvLGGIySdPW6MuZqGtfNuPlfU76nHcnFMD6Szu+7+cuemTeO/ugACls3nt8SrQbFFAj9FRdsJgj+lUThA==
+  dependencies:
+    "@internal-staff-portal/backend-shared" "^3.0.0"
+    express "^4.17.3"
+    mongoose "^6.2.6"
+    uuid "^8.3.2"
+
 "@internal-staff-portal/backend-shared@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@internal-staff-portal/backend-shared/-/backend-shared-3.0.0.tgz#f4a7e4b73fd8a433d355bd227cc71be02f562bc2"

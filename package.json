@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@authfunctions/express": "^3.2.6",
+    "@internal-staff-portal/backend-roles": "^3.0.0",
     "@internal-staff-portal/backend-shared": "^3.0.0",
     "@internal-staff-portal/backend-users": "^3.0.0",
     "bcrypt": "^5.0.1",
