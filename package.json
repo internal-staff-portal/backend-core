@@ -1,6 +1,6 @@
 {
   "name": "@internal-staff-portal/backend-core",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "The \"core\" backend module of the Internal-Staff-Portal.",
   "main": "dist/index.js",
   "repository": "https://github.com/internal-staff-portal/backend-core.git",
