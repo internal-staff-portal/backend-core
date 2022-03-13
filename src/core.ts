@@ -9,6 +9,7 @@ import {
   LogFunction,
   UserModel,
 } from "@internal-staff-portal/backend-shared";
+import { hashSync } from "bcrypt";
 import cors from "cors";
 import express, { Express } from "express";
 import RedisClient, { RedisOptions } from "ioredis";
@@ -31,6 +32,11 @@ export interface CoreOptions {
   mongoURI: string;
   adminKey: string;
   socketIO: socketIO;
+  admin: {
+    email: string;
+    password: string;
+    username: string;
+  };
 }
 
 //hacky way to fix ts interpreting RedisClient as a namespace
@@ -80,6 +86,9 @@ export class Core {
 
     //register all modules
     (options.modules || []).forEach((module) => this.addModule(module));
+
+    //create defaults
+    this.createDefaults(options.admin);
   }
 
   //get all endpoints
@@ -395,5 +404,29 @@ export class Core {
 
     //return auth instance
     return auth;
+  }
+
+  //create defaults on start-up
+  private async createDefaults({
+    email,
+    password,
+    username,
+  }: CoreOptions["admin"]) {
+    //get all admins
+    const admins = await UserModel.find({ privileges: "admin" });
+
+    //create admin account if no admin account exists
+    if (admins && admins.length === 0) {
+      //create new account
+      await UserModel.create({
+        email: email,
+        username: username,
+        hashedPassword: hashSync(password, 10),
+        privileges: "admin",
+      });
+
+      //log creating
+      this.logger("info", "Created default admin Account!");
+    }
   }
 }
