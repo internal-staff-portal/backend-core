@@ -7,8 +7,8 @@ import {
 import {
   ModuleConstructor,
   LogFunction,
-  UserModel,
 } from "@internal-staff-portal/backend-shared";
+import UsersModule, { UserModel } from "@internal-staff-portal/backend-users";
 import { hashSync } from "bcrypt";
 import cors from "cors";
 import express, { Express } from "express";
@@ -54,6 +54,10 @@ export class Core {
   private io: SocketServer;
 
   constructor(options: CoreOptions) {
+    //add default modules
+    options.modules = options.modules || [];
+    options.modules = [UsersModule(), ...options.modules];
+
     //init array of all module names
     this.modules = [];
 
@@ -85,7 +89,7 @@ export class Core {
     this.app.use("/auth", this.auth.Router);
 
     //register all modules
-    (options.modules || []).forEach((module) => this.addModule(module));
+    options.modules.forEach((module) => this.addModule(module));
 
     //create defaults
     this.createDefaults(options.admin);
@@ -168,6 +172,9 @@ export class Core {
 
     //use the router of the module
     this.app.use(join("/api", module.path), module.router);
+
+    //log the module
+    this.logger("info", `Registered ${module.name} module!`);
   }
 
   //init express app

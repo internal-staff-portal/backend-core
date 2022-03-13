@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@authfunctions/express": "^3.2.6",
-    "@internal-staff-portal/backend-shared": "^1.3.1",
+    "@internal-staff-portal/backend-shared": "2.0.0",
+    "@internal-staff-portal/backend-users": "^1.0.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",
