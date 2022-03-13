@@ -12,22 +12,22 @@
     jsonwebtoken "^8.5.1"
     uuid "^8.3.2"
 
-"@internal-staff-portal/backend-shared@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@internal-staff-portal/backend-shared/-/backend-shared-2.0.0.tgz#cea8487ddbe4e3387a1d449e4d6d4ff453eea714"
-  integrity sha512-n94cGmCoPnNc0PVxMp0qoz1ijhoEgmMnidg+XB1KpdXaYZUxUA2dBxtPf6z1JwB+16N1fjZY/kKMPBI84GzwWw==
+"@internal-staff-portal/backend-shared@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@internal-staff-portal/backend-shared/-/backend-shared-3.0.0.tgz#f4a7e4b73fd8a433d355bd227cc71be02f562bc2"
+  integrity sha512-CuxZPZQHYRFOA90oRuqOBVqx+8EiGYqi7W/37zizJeA+VhrnBFfvyD67zLArH9bU7DluTV53J6sePeaiy6Vw+g==
   dependencies:
     "@authfunctions/express" "^3.2.6"
     "@types/express" "^4.17.13"
     "@types/jsonwebtoken" "^8.5.8"
     "@types/node" "^17.0.21"
 
-"@internal-staff-portal/backend-users@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@internal-staff-portal/backend-users/-/backend-users-1.0.0.tgz#e184f681f953d6ab82c4ab20982165ab3289d767"
-  integrity sha512-VPsSkWA9mtszCHbcqqUXDEWEoI9Yoap6LzowFvcNpI+/5E8KKR4HSunaQv/gBVvbyz/iukq+wrWGeMBTKSYFDw==
+"@internal-staff-portal/backend-users@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@internal-staff-portal/backend-users/-/backend-users-3.0.0.tgz#fb804911eae051283bd509dc99045b92329a2073"
+  integrity sha512-IUJ5wQImfOJjaAugqLwH0biBPxRFiWLW7YCV8KnsTHo1MI0CdeKbFsnKzhJsewqKeocFB41Vwrw0dBnQIRLw3Q==
   dependencies:
-    "@internal-staff-portal/backend-shared" "2.0.0"
+    "@internal-staff-portal/backend-shared" "^3.0.0"
     express "^4.17.3"
     mongoose "^6.2.6"
     uuid "^8.3.2"
