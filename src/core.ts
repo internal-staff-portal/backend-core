@@ -9,7 +9,7 @@ import {
   LogFunction,
 } from "@internal-staff-portal/backend-shared";
 import UsersModule, { UserModel } from "@internal-staff-portal/backend-users";
-import RolesModule from "@internal-staff-portal/backend-users";
+import RolesModule from "@internal-staff-portal/backend-roles";
 import { hashSync } from "bcrypt";
 import cors from "cors";
 import express, { Express } from "express";
