@@ -33,7 +33,7 @@ export interface CoreOptions {
   mongoURI: string;
   adminKey: string;
   socketIO: socketIO;
-  admin: {
+  owner: {
     email: string;
     password: string;
     username: string;
@@ -93,7 +93,7 @@ export class Core {
     options.modules.forEach((module) => this.addModule(module));
 
     //create defaults
-    this.createDefaults(options.admin);
+    this.createDefaults(options.owner);
   }
 
   //get all endpoints
@@ -419,9 +419,9 @@ export class Core {
     email,
     password,
     username,
-  }: CoreOptions["admin"]) {
+  }: CoreOptions["owner"]) {
     //get all admins
-    const admins = await UserModel.find({ privileges: "admin" });
+    const admins = await UserModel.find({ privileges: "owner" });
 
     //create admin account if no admin account exists
     if (admins && admins.length === 0) {
@@ -430,7 +430,7 @@ export class Core {
         email: email,
         username: username,
         hashedPassword: hashSync(password, 10),
-        privileges: "admin",
+        privileges: "owner",
       });
 
       //log creating

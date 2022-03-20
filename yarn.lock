@@ -33,11 +33,12 @@
     "@types/node" "^17.0.21"
 
 "@internal-staff-portal/backend-users@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@internal-staff-portal/backend-users/-/backend-users-3.0.0.tgz#fb804911eae051283bd509dc99045b92329a2073"
-  integrity sha512-IUJ5wQImfOJjaAugqLwH0biBPxRFiWLW7YCV8KnsTHo1MI0CdeKbFsnKzhJsewqKeocFB41Vwrw0dBnQIRLw3Q==
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@internal-staff-portal/backend-users/-/backend-users-3.2.1.tgz#7c8462e420cf3f36d29f15333727ac4599eac2c2"
+  integrity sha512-A5fc8P/oX7jLZaB0cagRJTuOAqinENgQJm2xxD0fsOvt4jUzmAEk+3GwtC2YPBtwKz0C0LhMJwoa8BaRgIydsg==
   dependencies:
     "@internal-staff-portal/backend-shared" "^3.0.0"
+    bcrypt "^5.0.1"
     express "^4.17.3"
     mongoose "^6.2.6"
     uuid "^8.3.2"
@@ -119,9 +120,9 @@
     "@types/serve-static" "*"
 
 "@types/ioredis@^4.28.8":
-  version "4.28.8"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.28.8.tgz#a181d6eb70e402a6db670fe54b9c5bb66c0fac17"
-  integrity sha512-mULOyO2smtvkE1zmzRRA4P0+1UjEqusi014kXOL1q3CY0RgqkR5/wKvv+vAJbPw2Q66wPyylKeevUy+m/FaRMg==
+  version "4.28.10"
+  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.28.10.tgz#40ceb157a4141088d1394bb87c98ed09a75a06ff"
+  integrity sha512-69LyhUgrXdgcNDv7ogs1qXZomnfOEnSmrmMFqKgt1XMJxmoOSG/u3wYy13yACIfKuMJ8IhKgHafDO3sx19zVQQ==
   dependencies:
     "@types/node" "*"
 
@@ -356,9 +357,9 @@ debug@2.6.9:
     ms "2.0.0"
 
 debug@4, debug@4.x, debug@^4.3.1, debug@~4.3.1, debug@~4.3.2:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
-  integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
   dependencies:
     ms "2.1.2"
 
@@ -813,9 +814,9 @@ mongodb@4.3.1:
     saslprep "^1.0.3"
 
 mongoose@^6.2.4, mongoose@^6.2.6:
-  version "6.2.6"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.2.6.tgz#b30ae524b4ab9eeb33ed3988552d344f7b4b1962"
-  integrity sha512-OkPM1y7Ed9+Pa2/18mxegcD0OOe/aCXTQvOEyEn/MzVdaRsVSc+zE6myOS4LkWWi30c2tl4fpdJJvgC/MgXiww==
+  version "6.2.7"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.2.7.tgz#d8ea2fce4c19200d316c3ac4a8377f3af4fb4450"
+  integrity sha512-yqTZcM3u0+aLzl6cirtXy6vr24kt+kFyTucCQ3pyncvO1jGn/M1R09qkC/v54QoPXeVJdpcuS5eQWn0NLlDvKA==
   dependencies:
     bson "^4.2.2"
     kareem "2.3.4"
